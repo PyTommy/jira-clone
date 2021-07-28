@@ -17,9 +17,9 @@
     "baseUrl": ".",
     "paths": {
       "@jira-clone/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@jira-clone/shared-types": ["libs/shared-types/src/index.ts"],
       "@jira-clone/apps/api/*": ["apps/api/src/*"],
-      "@jira-clone/apps/api/test": ["apps/api/test/*"]
+      "@jira-clone/apps/api/test": ["apps/api/test/*"],
+      "@jira-clone/shared-types": ["libs/shared-types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

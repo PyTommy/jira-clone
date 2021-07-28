@@ -30,9 +30,6 @@
     ]
   },
   "projects": {
-    "api": {
-      "tags": []
-    },
     "api-interfaces": {
       "tags": []
     },
@@ -42,6 +39,9 @@
     "client-e2e": {
       "tags": [],
       "implicitDependencies": ["client"]
+    },
+    "server": {
+      "tags": []
     },
     "shared-types": {
       "tags": []
