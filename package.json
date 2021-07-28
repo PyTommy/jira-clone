@@ -7,6 +7,7 @@
     "start:client": "nx run client:serve",
     "start:api": "nx run api:serve",
     "build": "nx build",
+    "test": "npm run affected:test",
     "test:client": "nx run client:test",
     "test:client:watch": "nx run client:test --watch",
     "test:client:watchAll": "nx run client:test --watchAll",
