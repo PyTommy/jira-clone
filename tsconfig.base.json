@@ -13,10 +13,13 @@
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@jira-clone/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@jira-clone/shared-types": ["libs/shared-types/src/index.ts"]
+      "@jira-clone/shared-types": ["libs/shared-types/src/index.ts"],
+      "@jira-clone/apps/api/*": ["apps/api/src/*"],
+      "@jira-clone/apps/api/test": ["apps/api/test/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
