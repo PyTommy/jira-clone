@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@jira-clone/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@jira-clone/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@jira-clone/shared-types": ["libs/shared-types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

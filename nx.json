@@ -42,6 +42,9 @@
     "client-e2e": {
       "tags": [],
       "implicitDependencies": ["client"]
+    },
+    "shared-types": {
+      "tags": []
     }
   }
 }
