@@ -1,6 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+docker-compose up --build -d
 npm run affected:test
 npm run affected:lint
 npm run format:check
+docker-compose down # FIXME: testがfailすると、downしない...

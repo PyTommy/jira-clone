@@ -8,9 +8,12 @@
     "start:api": "nx run api:serve",
     "build": "nx build",
     "test": "npm run affected:test",
+    "test:all": "nx run client:test --silent && nx run server:test --silent && nx run db:test --silent",
     "test:client": "nx run client:test",
     "test:client:watch": "nx run client:test --watch",
     "test:client:watchAll": "nx run client:test --watchAll",
+    "test:db": "nx run db:test --silent",
+    "test:db:watch": "nx run db:test --watch --silent",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
     "affected:apps": "nx affected:apps",
@@ -28,7 +31,10 @@
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down",
+    "mysql": "docker exec -t -i mysql-container mysql -u root -p"
   },
   "private": true,
   "dependencies": {
@@ -39,13 +45,15 @@
     "document-register-element": "1.13.1",
     "express": "4.17.1",
     "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
     "sequelize": "^6.6.5",
     "sequelize-typescript": "^2.1.0",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "7.12.13",
