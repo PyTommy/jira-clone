@@ -2,7 +2,7 @@
 . "$(dirname "$0")/_/husky.sh"
 
 docker-compose up --build -d
-npm run affected:test
-npm run affected:lint
-npm run format:check
-docker-compose down # FIXME: testがfailすると、downしない...
+npm run affected:test || (docker-compose down && throw)
+npm run affected:lint || (docker-compose down && throw)
+npm run format:check || (docker-compose down && throw)
+docker-compose down
