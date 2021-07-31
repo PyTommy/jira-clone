@@ -9,7 +9,8 @@ beforeAll(async () => {
 
 describe('User', () => {
   beforeEach(async () => {
-    await User.sync({ force: true }) // drops table and re-creates it
+    // await User.truncate({ force: true }) // drops table and re-creates it
+    await User.destroy({ where: {}, force: true }) // delete all data from table.
   })
   it('should add a user', async () => {
     const id = uuidv4()
@@ -21,7 +22,7 @@ describe('User', () => {
     })
     await user.save()
 
-    const users = await User.findAll()
+    const users = await User.findAll({ where: { id } })
     expect(users.length).toBe(1)
   })
 })
