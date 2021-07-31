@@ -36,6 +36,9 @@
     "client": {
       "tags": []
     },
+    "db": {
+      "tags": []
+    },
     "server": {
       "tags": []
     },
