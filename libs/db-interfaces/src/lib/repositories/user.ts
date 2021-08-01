@@ -11,4 +11,8 @@ export type UserUpdationAttributes = Omit<
 >
 
 export interface IUserRepo
-  extends Repo<UserAttributes, UserCreationAttributes> {}
+  extends Repo<
+    UserAttributes,
+    UserCreationAttributes,
+    UserUpdationAttributes
+  > {}
