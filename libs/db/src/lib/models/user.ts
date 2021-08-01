@@ -2,16 +2,16 @@ import {
   Table,
   Column,
   Model,
-  DataType,
   Unique,
   CreatedAt,
   UpdatedAt,
   PrimaryKey,
   DeletedAt,
+  IsEmail,
 } from 'sequelize-typescript'
 import { Optional } from 'sequelize/types'
 
-export interface UserAttributes {
+export interface MysqlUserAttributes {
   id: string
   name: string
   email: string
@@ -21,13 +21,19 @@ export interface UserAttributes {
   deletedAt?: Date
 }
 
-export interface UserCreationAttributes
-  extends Optional<UserAttributes, 'createdAt' | 'updatedAt'> {}
+export interface MysqlUserCreationAttributes
+  extends Optional<
+    MysqlUserAttributes,
+    'createdAt' | 'updatedAt' | 'deletedAt'
+  > {}
 
 @Table({
   tableName: 'users',
 })
-export class UserModel extends Model<UserAttributes, UserCreationAttributes> {
+export class MysqlUserModel extends Model<
+  MysqlUserAttributes,
+  MysqlUserCreationAttributes
+> {
   @PrimaryKey
   @Column
   id: string
@@ -35,6 +41,7 @@ export class UserModel extends Model<UserAttributes, UserCreationAttributes> {
   @Column
   name: string
 
+  @IsEmail
   @Unique
   @Column
   email: string
@@ -52,5 +59,5 @@ export class UserModel extends Model<UserAttributes, UserCreationAttributes> {
 
   @DeletedAt
   @Column
-  deletedAt: Date
+  deletedAt?: Date | null
 }

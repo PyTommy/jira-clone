@@ -1,7 +1,8 @@
 require('mysql2/node_modules/iconv-lite').encodingExists('foo')
 import { connectDB } from './db'
-import { UserModel } from './models'
+import { MysqlUserModel } from './models'
 import { v4 as uuidv4 } from 'uuid'
+import { UserRepo } from './repositories'
 
 beforeAll(async () => {
   await connectDB()
@@ -9,20 +10,33 @@ beforeAll(async () => {
 
 describe('User', () => {
   beforeEach(async () => {
-    // await User.truncate({ force: true }) // drops table and re-creates it
-    await UserModel.destroy({ where: {}, force: true }) // delete all data from table.
+    await MysqlUserModel.destroy({ where: {}, force: true }) // delete all data from table.
   })
-  it('should add a user', async () => {
-    const id = uuidv4()
-    const user = new UserModel({
-      id: id,
-      name: 'tommy',
-      email: `trello+${id}@example.com`,
-      password_hash: id,
-    })
-    await user.save()
 
-    const users = await UserModel.findAll({ where: { id } })
-    expect(users.length).toBe(1)
+  describe('UserRepo', () => {
+    it('should create a user', async () => {
+      const id = uuidv4()
+      const email = `trello+${id}@example.com`
+      const name = 'create'
+      const password_hash = id
+
+      const userRepo = new UserRepo()
+      await userRepo.create({
+        id,
+        name,
+        email,
+        password_hash,
+      })
+
+      const user = await userRepo.getById(id)
+      expect(user.id).toBe(id)
+      expect(user.email).toBe(email)
+      expect(user.name).toBe(name)
+      expect(user.password_hash).toBe(password_hash) // FIXME remove it later
+    })
+
+    it('should throw user already exist error', () => {
+      // TODO
+    })
   })
 })
