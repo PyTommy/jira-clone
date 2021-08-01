@@ -5,6 +5,7 @@ import {
   MysqlUserUpdationAttributes,
 } from '../../models'
 import {
+  UserAttributesWithHashedPassword,
   UserCreationAttributes,
   UserUpdationAttributes,
 } from '@jira-clone/db-interfaces'
@@ -16,6 +17,31 @@ export class UserDataMapper {
       id,
       name,
       email,
+      createdAt: createdAt.getTime(),
+      updatedAt: updatedAt.getTime(),
+      deleted,
+      deletedAt: deletedAt?.getTime(),
+    }
+  }
+
+  static toUserAttributesWithHashedPassword(
+    data: MysqlUserAttributes,
+  ): UserAttributesWithHashedPassword {
+    const {
+      id,
+      name,
+      email,
+      createdAt,
+      updatedAt,
+      deleted,
+      deletedAt,
+      password_hash,
+    } = data
+    return {
+      id,
+      name,
+      email,
+      password_hash,
       createdAt: createdAt.getTime(),
       updatedAt: updatedAt.getTime(),
       deleted,
