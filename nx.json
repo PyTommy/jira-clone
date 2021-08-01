@@ -39,6 +39,9 @@
     "db": {
       "tags": []
     },
+    "db-interfaces": {
+      "tags": []
+    },
     "server": {
       "tags": []
     },

@@ -109,6 +109,27 @@
         }
       }
     },
+    "db-interfaces": {
+      "root": "libs/db-interfaces",
+      "sourceRoot": "libs/db-interfaces/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/db-interfaces/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/db-interfaces"],
+          "options": {
+            "jestConfig": "libs/db-interfaces/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "server": {
       "root": "apps/server",
       "sourceRoot": "apps/server/src",

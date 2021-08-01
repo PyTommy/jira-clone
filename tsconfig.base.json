@@ -20,6 +20,7 @@
       "@jira-clone/apps/server/*": ["apps/server/src/*"],
       "@jira-clone/apps/server/test": ["apps/server/test/*"],
       "@jira-clone/db": ["libs/db/src/index.ts"],
+      "@jira-clone/db-interfaces": ["libs/db-interfaces/src/index.ts"],
       "@jira-clone/shared-types": ["libs/shared-types/src/index.ts"]
     }
   },

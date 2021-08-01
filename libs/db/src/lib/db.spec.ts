@@ -13,8 +13,7 @@ describe('User', () => {
     await MysqlUserModel.destroy({ where: {}, force: true }) // delete all data from table.
   })
 
-  describe('UserRepo', () => {
-    it('should create a user', async () => {
+  describe('UserRepo', () => {    it('should create a user', async () => {
       const id = uuidv4()
       const email = `trello+${id}@example.com`
       const name = 'create'
