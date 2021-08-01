@@ -1,6 +1,6 @@
 require('mysql2/node_modules/iconv-lite').encodingExists('foo')
 import { connectDB } from './db'
-import { User } from './models'
+import { UserModel } from './models'
 import { v4 as uuidv4 } from 'uuid'
 
 beforeAll(async () => {
@@ -10,11 +10,11 @@ beforeAll(async () => {
 describe('User', () => {
   beforeEach(async () => {
     // await User.truncate({ force: true }) // drops table and re-creates it
-    await User.destroy({ where: {}, force: true }) // delete all data from table.
+    await UserModel.destroy({ where: {}, force: true }) // delete all data from table.
   })
   it('should add a user', async () => {
     const id = uuidv4()
-    const user = new User({
+    const user = new UserModel({
       id: id,
       name: 'tommy',
       email: `trello+${id}@example.com`,
@@ -22,7 +22,7 @@ describe('User', () => {
     })
     await user.save()
 
-    const users = await User.findAll({ where: { id } })
+    const users = await UserModel.findAll({ where: { id } })
     expect(users.length).toBe(1)
   })
 })

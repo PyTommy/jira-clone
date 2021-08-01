@@ -27,7 +27,7 @@ export interface UserCreationAttributes
 @Table({
   tableName: 'users',
 })
-export class User extends Model<UserAttributes, UserCreationAttributes> {
+export class UserModel extends Model<UserAttributes, UserCreationAttributes> {
   @PrimaryKey
   @Column
   id: string

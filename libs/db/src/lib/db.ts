@@ -1,15 +1,15 @@
 import { Sequelize } from 'sequelize-typescript'
-import { User } from './models'
+import { UserModel } from './models'
 
 const db = new Sequelize({
   database: 'trello',
   dialect: 'mysql',
   username: 'root',
   password: 'testtest',
-  models: [User],
+  models: [UserModel],
 })
 
-db.addModels([User])
+db.addModels([UserModel])
 
 export const connectDB = async () => {
   try {
