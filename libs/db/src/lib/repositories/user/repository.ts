@@ -1,4 +1,4 @@
-import { MysqlUserAttributes, MysqlUserModel } from '../../models'
+import { MysqlUserModel } from '../../models'
 import { UserAttributes } from '@jira-clone/shared-types'
 import {
   IUserRepo,
