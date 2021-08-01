@@ -1,11 +1,14 @@
-import { MysqlUserAttributes, MysqlUserCreationAttributes } from '../../models'
-import { Modify } from '../../utils/typeUtils'
+import { UserAttributes } from '@jira-clone/shared-types'
 import { Repo } from '../base.repository'
 
-export type User = Modify<
-  MysqlUserAttributes,
-  { createdAt: number; updatedAt: number; deletedAt?: number }
+export type UserCreationAttributes = Omit<
+  UserAttributes & { password_hash: string },
+  'createdAt' | 'updatedAt' | 'deletedAt' | 'deleted'
 >
-export type UserCreate = Modify<MysqlUserCreationAttributes, {}>
+export type UserUpdationAttributes = Omit<
+  Partial<UserAttributes> & { id: string },
+  'createdAt' | 'updatedAt' | 'deletedAt' | 'deleted'
+>
 
-export interface IUserRepo extends Repo<User, UserCreate> {}
+export interface IUserRepo
+  extends Repo<UserAttributes, UserCreationAttributes> {}

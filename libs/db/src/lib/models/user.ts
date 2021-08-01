@@ -8,8 +8,8 @@ import {
   PrimaryKey,
   DeletedAt,
   IsEmail,
+  Default,
 } from 'sequelize-typescript'
-import { Optional } from 'sequelize/types'
 
 export interface MysqlUserAttributes {
   id: string
@@ -18,13 +18,26 @@ export interface MysqlUserAttributes {
   password_hash: string
   createdAt: Date
   updatedAt: Date
+  deleted: boolean
   deletedAt?: Date
 }
 
 export interface MysqlUserCreationAttributes
-  extends Optional<
+  extends Omit<
     MysqlUserAttributes,
-    'createdAt' | 'updatedAt' | 'deletedAt'
+    'createdAt' | 'updatedAt' | 'deletedAt' | 'deleted'
+  > {}
+
+export interface MysqlUserUpdationAttributes
+  extends Omit<
+    MysqlUserAttributes,
+    'createdAt' | 'updatedAt' | 'deletedAt' | 'deleted' | 'password_hash'
+  > {}
+
+export interface MysqlUserUpdationAttributes
+  extends Omit<
+    MysqlUserAttributes,
+    'createdAt' | 'updatedAt' | 'deletedAt' | 'deleted' | 'password_hash'
   > {}
 
 @Table({
@@ -56,6 +69,10 @@ export class MysqlUserModel extends Model<
   @UpdatedAt
   @Column
   updatedAt: Date
+
+  @Default(false)
+  @Column
+  deleted: boolean
 
   @DeletedAt
   @Column

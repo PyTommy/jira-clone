@@ -29,10 +29,13 @@ describe('User', () => {
       })
 
       const user = await userRepo.getById(id)
-      expect(user.id).toBe(id)
-      expect(user.email).toBe(email)
-      expect(user.name).toBe(name)
-      expect(user.password_hash).toBe(password_hash) // FIXME remove it later
+      if (user) {
+        expect(user.id).toBe(id)
+        expect(user.email).toBe(email)
+        expect(user.name).toBe(name)
+      } else {
+        throw new Error('user not exists')
+      }
     })
 
     it('should throw user already exist error', () => {
