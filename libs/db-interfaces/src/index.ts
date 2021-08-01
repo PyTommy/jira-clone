@@ -1,1 +1,2 @@
-export * from './lib/db-interfaces'
+export * from './lib/repositories'
+export * from './lib/db'

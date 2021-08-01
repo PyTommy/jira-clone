@@ -4,7 +4,10 @@ import {
   MysqlUserCreationAttributes,
   MysqlUserUpdationAttributes,
 } from '../../models'
-import { UserCreationAttributes, UserUpdationAttributes } from './interface'
+import {
+  UserCreationAttributes,
+  UserUpdationAttributes,
+} from '@jira-clone/db-interfaces'
 
 export class UserDataMapper {
   static toUserAttributes(data: MysqlUserAttributes): UserAttributes {

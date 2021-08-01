@@ -1,2 +1,2 @@
 export * from './repository'
-export * from './interface'
+export * from '@jira-clone/db-interfaces'

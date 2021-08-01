@@ -1,11 +1,18 @@
 require('mysql2/node_modules/iconv-lite').encodingExists('foo')
-import { connectDB } from './db'
+import { DB } from './db'
 import { MysqlUserModel } from './models'
 import { v4 as uuidv4 } from 'uuid'
 import { UserRepo } from './repositories'
 
 beforeAll(async () => {
-  await connectDB()
+  const db = new DB({
+    host: 'localhost',
+    port: 3306,
+    database: 'trello',
+    username: 'root',
+    password: 'testtest',
+  })
+  await db.connectDB()
 })
 
 describe('User', () => {
@@ -13,7 +20,8 @@ describe('User', () => {
     await MysqlUserModel.destroy({ where: {}, force: true }) // delete all data from table.
   })
 
-  describe('UserRepo', () => {    it('should create a user', async () => {
+  describe('UserRepo', () => {
+    it('should create a user', async () => {
       const id = uuidv4()
       const email = `trello+${id}@example.com`
       const name = 'create'
