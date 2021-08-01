@@ -6,7 +6,6 @@ import {
   UserUpdationAttributes,
 } from '@jira-clone/db-interfaces'
 import { UserDataMapper } from './dataMapper'
-import { Sequelize } from 'sequelize/types'
 
 export class UserRepo implements IUserRepo {
   constructor() {}
