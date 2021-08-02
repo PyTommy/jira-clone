@@ -8,7 +8,7 @@
 
 ##### [Pegmatite](https://chrome.google.com/webstore/detail/pegmatite/jegkfbnfbfnohncpcfcimepibmhlkldo)
 
--
+- github で、puml 記述を図で表示してくれる。
 
 ## 書くときの推奨環境
 
