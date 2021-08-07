@@ -9,6 +9,7 @@ import {
   HTTPNotFoundError,
   HTTPUnauthorizedError,
 } from '../valueObject/httpError'
+import { AuthService } from '../services/auth.service'
 
 export const registerUser: RequestHandler<
   {},
@@ -17,30 +18,14 @@ export const registerUser: RequestHandler<
 > = async (req, res, next) => {
   try {
     const { name, email, password } = req.body
-    const alreadyRegisteredUser = await UserRepo.getByEmail(email)
-    if (alreadyRegisteredUser) {
-      throw new HTTPAlreadyExistsError('already registered email.')
-    }
 
-    const hashedPassword = await authUtils.hash(password)
-    const newUserId = StrUtils.uuid()
-    await UserRepo.create({
+    const { token, user } = await AuthService.register({
       name,
       email,
-      password_hash: hashedPassword,
-      id: newUserId,
+      password,
     })
 
-    const user = await UserRepo.getById(newUserId)
-    if (!user) {
-      throw new HTTPInternalServerError(
-        'Could not find user after registration.',
-      )
-    }
-
-    const token = authUtils.createToken(user.id)
     res.setHeader('set-cookie', [authUtils.createCookie(token)])
-
     res.status(201).send({ user })
   } catch (e) {
     next(e)
