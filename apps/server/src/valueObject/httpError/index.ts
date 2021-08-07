@@ -71,6 +71,11 @@ export class HTTPConflictError extends BaseError {
     super('CONFLICT', HttpStatusCode.CONFLICT, description, true)
   }
 }
+export class HTTPAlreadyExistsError extends BaseError {
+  constructor(description = 'already exists') {
+    super('Already Exists', HttpStatusCode.CONFLICT, description, true)
+  }
+}
 
 /**
  * The request entity has a media type which the server or resource does not support.
