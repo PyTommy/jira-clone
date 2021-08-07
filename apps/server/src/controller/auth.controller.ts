@@ -3,7 +3,12 @@ import { UserAttributes } from '@jira-clone/shared-types'
 import { UserRepo } from '@jira-clone/apps/server/repositories'
 import { StrUtils } from '../util/stringUtils'
 import { authUtils } from '../util/authUtils'
-import { HTTPAlreadyExistsError } from '../valueObject/httpError'
+import {
+  HTTPAlreadyExistsError,
+  HTTPInternalServerError,
+  HTTPNotFoundError,
+  HTTPUnauthorizedError,
+} from '../valueObject/httpError'
 
 export const registerUser: RequestHandler<
   {},
@@ -28,10 +33,11 @@ export const registerUser: RequestHandler<
 
     const user = await UserRepo.getById(newUserId)
     if (!user) {
-      throw new Error('something went wrong') // TODO あとでErrorHandlingしっかりする。
+      throw new HTTPInternalServerError(
+        'Could not find user after registration.',
+      )
     }
 
-    // set-token in cookie;
     const token = authUtils.createToken(user.id)
     res.setHeader('set-cookie', [authUtils.createCookie(token)])
 
@@ -49,7 +55,7 @@ export const login: RequestHandler<
   const { email, password } = req.body
   const user = await UserRepo.getWithHashedPasswordByEmail(email)
   if (!user) {
-    throw new Error('user not found with the email.') // TODO あとでErrorHandlingしっかりする。
+    throw new HTTPNotFoundError('Not found user with the account.')
   }
 
   const isValidPassword = authUtils.isPasswordMaching(
@@ -57,7 +63,7 @@ export const login: RequestHandler<
     user.password_hash,
   )
   if (!isValidPassword) {
-    throw new Error('password is not matching')
+    throw new HTTPUnauthorizedError('password is wrong')
   }
 
   // set-token in cookie;
