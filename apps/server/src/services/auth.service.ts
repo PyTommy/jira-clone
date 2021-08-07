@@ -41,32 +41,14 @@ interface IAuthService {
 // Service Class Implementation
 // ============
 class AuthServiceImpl implements IAuthService {
+  // ======= Public =======
   public register: Register = async ({ name, email, password }) => {
-    const alreadyRegisteredUser = await UserRepo.getByEmail(email)
-    if (alreadyRegisteredUser) {
-      throw new HTTPAlreadyExistsError('already registered email.')
-    }
-
-    const hashedPassword = await authUtils.hash(password)
-    const newUserId = StrUtils.uuid()
-    await UserRepo.create({
-      name,
-      email,
-      password_hash: hashedPassword,
-      id: newUserId,
-    })
-
-    const user = await UserRepo.getById(newUserId)
-    if (!user) {
-      throw new HTTPInternalServerError(
-        'Could not find user after registration.',
-      )
-    }
-
+    await this.validateUserNotExistByEmail(email)
+    const user = await this.saveUser({ name, email, password })
     const token = authUtils.createToken(user.id)
-
     return { user, token }
   }
+
   public login: Login = async ({ email, password }) => {
     const user = await UserRepo.getWithHashedPasswordByEmail(email)
     if (!user) {
@@ -85,6 +67,35 @@ class AuthServiceImpl implements IAuthService {
 
     delete user.password_hash
     return { user, token }
+  }
+
+  // ======= Private =======
+  private validateUserNotExistByEmail = async (email: string) => {
+    const alreadyRegisteredUser = await UserRepo.getByEmail(email)
+    if (alreadyRegisteredUser) {
+      throw new HTTPAlreadyExistsError('already registered email.')
+    }
+  }
+  private saveUser = async ({
+    name,
+    email,
+    password,
+  }): Promise<UserAttributes> => {
+    const hashedPassword = await authUtils.hash(password)
+    const newUserId = StrUtils.uuid()
+    await UserRepo.create({
+      name,
+      email,
+      password_hash: hashedPassword,
+      id: newUserId,
+    })
+    const user = await UserRepo.getById(newUserId)
+    if (!user) {
+      throw new HTTPInternalServerError(
+        'Could not find user after registration.',
+      )
+    }
+    return user
   }
 }
 
