@@ -1,4 +1,4 @@
-import HttpStatusCode from './httpStatusCode'
+import { HttpStatusCode } from '@jira-clone/apps/server/commons/httpStatusCode.emum'
 import { BaseError } from './baseError'
 
 export class HTTPBadRequestError extends BaseError {
@@ -43,12 +43,7 @@ export class HTTPNotFoundError extends BaseError {
  */
 export class HTTPMethodNotAllowedError extends BaseError {
   constructor(description = 'bad request') {
-    super(
-      'Method Not Allowed',
-      HttpStatusCode.METHOD_NOT_ALLOWED,
-      description,
-      true,
-    )
+    super('Method Not Allowed', HttpStatusCode.METHOD_NOT_ALLOWED, description, true)
   }
 }
 
@@ -83,12 +78,7 @@ export class HTTPAlreadyExistsError extends BaseError {
  */
 export class HTTPUnsupportedMediaTypeError extends BaseError {
   constructor(description = 'unsupported media type') {
-    super(
-      'UNSUPPORTED_MEDIA_TYPE',
-      HttpStatusCode.UNSUPPORTED_MEDIA_TYPE,
-      description,
-      true,
-    )
+    super('UNSUPPORTED_MEDIA_TYPE', HttpStatusCode.UNSUPPORTED_MEDIA_TYPE, description, true)
   }
 }
 
@@ -97,12 +87,7 @@ export class HTTPUnsupportedMediaTypeError extends BaseError {
  */
 export class HTTPInternalServerError extends BaseError {
   constructor(description = 'internal server error') {
-    super(
-      'INTERNAL SERVER ERROR',
-      HttpStatusCode.INTERNAL_SERVER_ERROR,
-      description,
-      false,
-    )
+    super('INTERNAL SERVER ERROR', HttpStatusCode.INTERNAL_SERVER_ERROR, description, false)
   }
 }
 /**

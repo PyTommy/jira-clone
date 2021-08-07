@@ -2,6 +2,7 @@ import { RequestHandler } from 'express'
 import { UserAttributes } from '@jira-clone/shared-types'
 import { authUtils } from '../util/authUtils'
 import { AuthService } from '../services/auth.service'
+import { HttpStatusCode } from '../commons/httpStatusCode.emum'
 
 export const registerUser: RequestHandler<
   {},
@@ -17,7 +18,7 @@ export const registerUser: RequestHandler<
     })
 
     res.setHeader('set-cookie', [authUtils.createCookie(token)])
-    return res.status(201).send({ user })
+    return res.status(HttpStatusCode.CREATED).send({ user })
   } catch (e) {
     next(e)
   }
@@ -33,7 +34,7 @@ export const login: RequestHandler<
     const { user, token } = await AuthService.login({ email, password })
 
     res.setHeader('set-cookie', [authUtils.createCookie(token)])
-    return res.status(200).send({ user })
+    return res.status(HttpStatusCode.OK).send({ user })
   } catch (e) {
     next(e)
   }
