@@ -1,4 +1,4 @@
-import { BaseError } from '../valueObject/httpError/baseError'
+import { BaseError } from './baseError'
 
 class ErrorHandler {
   public async handleError(err: Error): Promise<void> {

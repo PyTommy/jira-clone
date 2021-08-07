@@ -1,4 +1,4 @@
-import HttpStatusCode from '../../enums/httpStatusCode'
+import HttpStatusCode from './httpStatusCode'
 import { BaseError } from './baseError'
 
 export class HTTPBadRequestError extends BaseError {

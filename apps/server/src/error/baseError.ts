@@ -1,4 +1,4 @@
-import HttpStatusCode from '@jira-clone/apps/server/enums/httpStatusCode'
+import HttpStatusCode from './httpStatusCode'
 
 export class BaseError extends Error {
   public readonly name: string

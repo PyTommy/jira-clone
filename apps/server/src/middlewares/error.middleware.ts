@@ -1,5 +1,5 @@
-import { errorHandler } from '@jira-clone/apps/server/util/errorHandler'
-import { BaseError } from '@jira-clone/apps/server/valueObject/httpError/baseError'
+import { errorHandler } from '@jira-clone/apps/server/error/errorHandler'
+import { BaseError } from '@jira-clone/apps/server/error/baseError'
 import { Request, Response, NextFunction } from 'express'
 
 export const errorMiddleware = async (

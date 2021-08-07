@@ -7,7 +7,7 @@ import {
   HTTPInternalServerError,
   HTTPNotFoundError,
   HTTPUnauthorizedError,
-} from '../valueObject/httpError'
+} from '@jira-clone/apps/server/error'
 
 interface IAuthService {
   register(data: {
