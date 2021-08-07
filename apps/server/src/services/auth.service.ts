@@ -5,14 +5,20 @@ import { StrUtils } from '../util/stringUtils'
 import {
   HTTPAlreadyExistsError,
   HTTPInternalServerError,
+  HTTPNotFoundError,
+  HTTPUnauthorizedError,
 } from '../valueObject/httpError'
 
 interface IAuthService {
-  register({
-    name,
-    email,
-    password,
+  register(data: {
+    name: string
+    email: string
+    password: string
   }): Promise<{ token: TokenData; user: UserAttributes }>
+  login(data: {
+    email: string
+    password: string
+  }): Promise<{ user: UserAttributes; token: TokenData }>
 }
 
 class AuthServiceImpl implements IAuthService {
@@ -21,9 +27,9 @@ class AuthServiceImpl implements IAuthService {
     email,
     password,
   }: {
-    name: any
-    email: any
-    password: any
+    name: string
+    email: string
+    password: string
   }): Promise<{ token: TokenData; user: UserAttributes }> {
     const alreadyRegisteredUser = await UserRepo.getByEmail(email)
     if (alreadyRegisteredUser) {
@@ -48,6 +54,32 @@ class AuthServiceImpl implements IAuthService {
 
     const token = authUtils.createToken(user.id)
 
+    return { user, token }
+  }
+  async login({
+    email,
+    password,
+  }: {
+    email: string
+    password: string
+  }): Promise<{ user: UserAttributes; token: TokenData }> {
+    const user = await UserRepo.getWithHashedPasswordByEmail(email)
+    if (!user) {
+      throw new HTTPNotFoundError('Not found user with the account.')
+    }
+
+    const isValidPassword = authUtils.isPasswordMaching(
+      password,
+      user.password_hash,
+    )
+    if (!isValidPassword) {
+      throw new HTTPUnauthorizedError('password is wrong')
+    }
+
+    // set-token in cookie;
+    const token = authUtils.createToken(user.id)
+
+    delete user.password_hash
     return { user, token }
   }
 }
