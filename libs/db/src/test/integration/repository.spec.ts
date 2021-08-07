@@ -2,16 +2,17 @@ require('mysql2/node_modules/iconv-lite').encodingExists('foo')
 import { DB, UserRepo } from '@jira-clone/db'
 import { MysqlUserModel } from '../../lib/models'
 import { v4 as uuidv4 } from 'uuid'
+import { enviroments } from '../test_enviroments'
 
 const userRepo = new UserRepo()
 
 beforeAll(async () => {
   const db = new DB({
-    host: 'localhost',
-    port: 3306,
-    database: 'trello',
-    username: 'root',
-    password: 'testtest',
+    host: enviroments.host,
+    port: Number(enviroments.port),
+    database: enviroments.database,
+    username: enviroments.username,
+    password: enviroments.password,
   })
   await db.connectDB()
 })
