@@ -8,6 +8,7 @@ import {
   HTTPNotFoundError,
   HTTPUnauthorizedError,
 } from '@jira-clone/apps/server/error'
+import { UserAttributesWithHashedPassword } from '@jira-clone/db-interfaces'
 
 // ============
 // Type Definitions
@@ -41,46 +42,33 @@ interface IAuthService {
 // Service Class Implementation
 // ============
 class AuthServiceImpl implements IAuthService {
-  // ======= Public =======
+  // ==============
+  // Public
+  // ==============
   public register: Register = async ({ name, email, password }) => {
-    await this.validateUserNotExistByEmail(email)
-    const user = await this.saveUser({ name, email, password })
+    await this.validateUserNotExist(email)
+    const user = await this.createUser({ name, email, password })
     const token = authUtils.createToken(user.id)
     return { user, token }
   }
 
   public login: Login = async ({ email, password }) => {
-    const user = await UserRepo.getWithHashedPasswordByEmail(email)
-    if (!user) {
-      throw new HTTPNotFoundError('Not found user with the account.')
-    }
-
-    const isValidPassword = authUtils.isPasswordMaching(
-      password,
-      user.password_hash,
-    )
-    if (!isValidPassword) {
-      throw new HTTPUnauthorizedError('password is wrong')
-    }
-
+    const { user, password_hash } = await this.getUserDataWithHashedPassword(email)
+    this.validatePassword(password, password_hash)
     const token = authUtils.createToken(user.id)
-
-    delete user.password_hash
     return { user, token }
   }
 
-  // ======= Private =======
-  private validateUserNotExistByEmail = async (email: string) => {
+  // ==============
+  // Private
+  // ==============
+  private validateUserNotExist = async (email: string) => {
     const alreadyRegisteredUser = await UserRepo.getByEmail(email)
     if (alreadyRegisteredUser) {
       throw new HTTPAlreadyExistsError('already registered email.')
     }
   }
-  private saveUser = async ({
-    name,
-    email,
-    password,
-  }): Promise<UserAttributes> => {
+  private createUser = async ({ name, email, password }): Promise<UserAttributes> => {
     const hashedPassword = await authUtils.hash(password)
     const newUserId = StrUtils.uuid()
     await UserRepo.create({
@@ -91,11 +79,24 @@ class AuthServiceImpl implements IAuthService {
     })
     const user = await UserRepo.getById(newUserId)
     if (!user) {
-      throw new HTTPInternalServerError(
-        'Could not find user after registration.',
-      )
+      throw new HTTPInternalServerError('Could not find user after registration.')
     }
     return user
+  }
+
+  private getUserDataWithHashedPassword = async (
+    email: string,
+  ): Promise<{ user: UserAttributes; password_hash: string }> => {
+    const user = await UserRepo.getWithHashedPasswordByEmail(email)
+    if (!user) throw new HTTPNotFoundError('Not found user with the account.')
+    const { password_hash, ...otherUserProps } = user
+    return { user: otherUserProps, password_hash }
+  }
+  private validatePassword = (password: string, password_hash: string) => {
+    const isValidPassword = authUtils.isPasswordMaching(password, password_hash)
+    if (!isValidPassword) {
+      throw new HTTPUnauthorizedError('password is wrong')
+    }
   }
 }
 
