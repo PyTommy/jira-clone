@@ -3,14 +3,16 @@ import request from 'supertest'
 import app from '@jira-clone/apps/server/app'
 import { DB } from '@jira-clone/db'
 import { StrUtils } from '@jira-clone/apps/server/util/stringUtils'
+import { environment } from '@jira-clone/apps/server/environments/environment'
+import { authUtils } from '@jira-clone/apps/server/util/authUtils'
 
 beforeAll(async () => {
   const db = new DB({
-    host: 'localhost',
-    port: 3306,
-    database: 'trello',
-    username: 'root',
-    password: 'testtest',
+    host: environment.dbHost,
+    port: Number(environment.dbPort),
+    database: environment.dbDatabase,
+    username: environment.dbUsername,
+    password: environment.dbPassword,
   })
   await db.connectDB()
 })
@@ -26,7 +28,7 @@ describe('GET /api/task/:id', () => {
 })
 
 describe('POST /api/auth/register', () => {
-  it('', async () => {
+  it('should success with appropriate response.', async () => {
     const uuid = StrUtils.uuid()
     const user1 = {
       name: 'new_user1',
@@ -40,6 +42,48 @@ describe('POST /api/auth/register', () => {
     expect(response.body.user.name).toBe(user1.name)
     expect(response.body.user.email).toBe(user1.email)
     expect(response.body.user.password_hash).toBeUndefined()
-    expect(typeof response.body.accessToken).toBe('string')
+    expect(
+      authUtils.getCookieValue(
+        response.header['set-cookie'][0],
+        'Authorization',
+      ).length > 0,
+    ).toBeTruthy()
+    expect(
+      authUtils.getCookieValue(response.header['set-cookie'][0], 'Max-Age')
+        .length > 0,
+    ).toBeTruthy()
+  })
+})
+
+describe('POST /api/auth/login', () => {
+  let user = beforeAll(async () => {
+    const uuid = StrUtils.uuid()
+    user = {
+      name: 'new_user1',
+      email: 'new_user' + uuid + '@example.com',
+      password: 'demodemo',
+    }
+    await request(app).post('/api/auth/register').send(user)
+  })
+  it('should login successfully', async () => {
+    const response = await request(app).post('/api/auth/login').send({
+      email: user.email,
+      password: user.password,
+    })
+
+    expect(response.status).toBe(200)
+    expect(response.body.user.name).toBe(user.name)
+    expect(response.body.user.email).toBe(user.email)
+    expect(response.body.user.password_hash).toBeUndefined()
+    expect(
+      authUtils.getCookieValue(
+        response.header['set-cookie'][0],
+        'Authorization',
+      ).length > 0,
+    ).toBeTruthy()
+    expect(
+      authUtils.getCookieValue(response.header['set-cookie'][0], 'Max-Age')
+        .length > 0,
+    ).toBeTruthy()
   })
 })
