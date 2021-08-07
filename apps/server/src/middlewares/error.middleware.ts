@@ -16,6 +16,10 @@ export const errorMiddleware = async (
     } else {
       res.status(500).send(err)
     }
+  } else {
+    await errorHandler.handleError(err)
+    res
+      .send(500)
+      .send({ statusText: 'internal server error', message: err.message })
   }
-  await errorHandler.handleError(err)
 }
