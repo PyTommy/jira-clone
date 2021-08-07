@@ -12,9 +12,9 @@ export default function initializeApp(router: Router) {
   app.use(express.json())
   app.use(cors(origin))
   app.use(cookieParser())
-  app.use(errorMiddleware)
 
   app.use('/api', router)
+  app.use(errorMiddleware)
 
   return app
 }

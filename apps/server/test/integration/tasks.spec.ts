@@ -53,6 +53,18 @@ describe('POST /api/auth/register', () => {
         .length > 0,
     ).toBeTruthy()
   })
+  it('should fail with already exsit error(409)', async () => {
+    const uuid = StrUtils.uuid()
+    const user1 = {
+      name: 'new_user2',
+      email: 'new_user' + uuid + '@example.com',
+      password: 'demodemo',
+    }
+    await request(app).post('/api/auth/register').send(user1)
+
+    const response = await request(app).post('/api/auth/register').send(user1)
+    expect(response.status).toBe(409)
+  })
 })
 
 describe('POST /api/auth/login', () => {

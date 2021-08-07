@@ -13,7 +13,7 @@
     "test:client:watch": "nx run client:test --watch",
     "test:client:watchAll": "nx run client:test --watchAll",
     "test:server": "nx run server:test --silent",
-    "test:server:watch": "nx run server:test --watch --silent",
+    "test:server:watch": "nx run server:test --watch --silent --detectOpenHandles",
     "test:db": "nx run db:test --silent",
     "test:db:watch": "nx run db:test --watch --silent",
     "lint": "nx workspace-lint && nx lint",

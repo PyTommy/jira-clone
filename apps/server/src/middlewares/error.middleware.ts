@@ -8,17 +8,13 @@ export const errorMiddleware = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (!errorHandler.isTrustedError(err)) {
-    if (err instanceof BaseError) {
-      res
-        .status(err.httpCode)
-        .send({ statusText: err.name, message: err.message })
-    } else {
-      res.status(500).send(err)
-    }
+  if (errorHandler.isTrustedError(err)) {
+    res
+      .status((err as BaseError).httpCode)
+      .send({ statusText: err.name, message: err.message })
   } else {
     await errorHandler.handleError(err)
-    res
+    return res
       .send(500)
       .send({ statusText: 'internal server error', message: err.message })
   }
