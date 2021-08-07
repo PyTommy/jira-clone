@@ -2,6 +2,7 @@ import express from 'express'
 import { Router } from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import { errorMiddleware } from '../middlewares/error.middleware'
 
 export default function initializeApp(router: Router) {
   const app = express()
@@ -11,6 +12,7 @@ export default function initializeApp(router: Router) {
   app.use(express.json())
   app.use(cors(origin))
   app.use(cookieParser())
+  app.use(errorMiddleware)
 
   app.use('/api', router)
 
