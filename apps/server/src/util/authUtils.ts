@@ -4,12 +4,16 @@ import jwt from 'jsonwebtoken'
 
 type CookieKey = 'Authorization' | 'Max-Age'
 
+interface ValidCookie {
+  Authorization: string
+}
+
 interface TokenData {
   token: string
   expiresIn: number
 }
 
-interface DataStoredInToken {
+export interface DataStoredInToken {
   _id: string
 }
 
@@ -19,6 +23,10 @@ interface IAuthUtil {
   isPasswordMaching(password: string, password_hash: string): Promise<boolean>
   createCookie(tokenData: TokenData): string
   getCookieValue(cookie: string, key: CookieKey): string | undefined
+  isValidCookie(cookie: any): cookie is ValidCookie
+  isValidDataStoredInToken(
+    dataStoredInToken: any,
+  ): dataStoredInToken is DataStoredInToken
 }
 
 class AuthUtilsImpl implements IAuthUtil {
@@ -48,6 +56,18 @@ class AuthUtilsImpl implements IAuthUtil {
     if (result) {
       return result[1]
     }
+  }
+  isValidCookie(cookie: any): cookie is ValidCookie {
+    return (
+      typeof cookie === 'object' &&
+      cookie !== null &&
+      typeof cookie.Authorization === 'string'
+    )
+  }
+  isValidDataStoredInToken(data: any): data is DataStoredInToken {
+    return (
+      typeof data === 'object' && data !== null && typeof data._id === 'string'
+    )
   }
 }
 
