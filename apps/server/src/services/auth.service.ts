@@ -9,28 +9,39 @@ import {
   HTTPUnauthorizedError,
 } from '@jira-clone/apps/server/error'
 
+// ============
+// Type Definitions
+// ============
+// Register
+type RegisterParams = {
+  name: string
+  email: string
+  password: string
+}
+type RegisterReturnValue = Promise<{ token: TokenData; user: UserAttributes }>
+type Register = (data: RegisterParams) => RegisterReturnValue
+
+// Login
+type LoginParams = {
+  email: string
+  password: string
+}
+type LoginReturnValue = Promise<{ user: UserAttributes; token: TokenData }>
+type Login = (data: LoginParams) => LoginReturnValue
+
+// ============
+// Service Class Interface
+// ============
 interface IAuthService {
-  register(data: {
-    name: string
-    email: string
-    password: string
-  }): Promise<{ token: TokenData; user: UserAttributes }>
-  login(data: {
-    email: string
-    password: string
-  }): Promise<{ user: UserAttributes; token: TokenData }>
+  register: Register
+  login: Login
 }
 
+// ============
+// Service Class Implementation
+// ============
 class AuthServiceImpl implements IAuthService {
-  public async register({
-    name,
-    email,
-    password,
-  }: {
-    name: string
-    email: string
-    password: string
-  }): Promise<{ token: TokenData; user: UserAttributes }> {
+  public register: Register = async ({ name, email, password }) => {
     const alreadyRegisteredUser = await UserRepo.getByEmail(email)
     if (alreadyRegisteredUser) {
       throw new HTTPAlreadyExistsError('already registered email.')
@@ -56,13 +67,7 @@ class AuthServiceImpl implements IAuthService {
 
     return { user, token }
   }
-  async login({
-    email,
-    password,
-  }: {
-    email: string
-    password: string
-  }): Promise<{ user: UserAttributes; token: TokenData }> {
+  public login: Login = async ({ email, password }) => {
     const user = await UserRepo.getWithHashedPasswordByEmail(email)
     if (!user) {
       throw new HTTPNotFoundError('Not found user with the account.')
@@ -76,7 +81,6 @@ class AuthServiceImpl implements IAuthService {
       throw new HTTPUnauthorizedError('password is wrong')
     }
 
-    // set-token in cookie;
     const token = authUtils.createToken(user.id)
 
     delete user.password_hash
