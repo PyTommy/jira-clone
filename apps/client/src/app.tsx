@@ -7,7 +7,7 @@ import { RedirectRoute } from './components/Route'
 
 export const App = () => {
   const [isInializing, setIsInitializing] = useState(false) // 自動ログインとかする。
-  const isAuthorized = true
+  const isAuthorized = false
 
   if (isInializing) {
     return <div>This is Loading Spinner!!</div>
