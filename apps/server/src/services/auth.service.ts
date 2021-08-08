@@ -1,6 +1,6 @@
 import { UserRepo } from '@jira-clone/apps/server/repositories'
 import { UserAttributes } from '@jira-clone/shared-types'
-import { authUtils, TokenData } from '../util/authUtils'
+import { authUtils, TokenData, ValidCookie } from '../util/authUtils'
 import { StrUtils } from '../util/stringUtils'
 import {
   HTTPAlreadyExistsError,
@@ -30,12 +30,18 @@ type LoginParams = {
 type LoginReturnValue = Promise<{ user: UserAttributes; token: TokenData }>
 type Login = (data: LoginParams) => LoginReturnValue
 
+// cookieLogin
+type CookieLoginParams = { cookies: ValidCookie }
+type CookieLoginReturnValue = Promise<{ user: UserAttributes }>
+type CookieLogin = (data: CookieLoginParams) => CookieLoginReturnValue
+
 // ============
 // Service Class Interface
 // ============
 interface IAuthService {
   register: Register
   login: Login
+  cookieLogin: CookieLogin
 }
 
 // ============
@@ -57,6 +63,12 @@ class AuthServiceImpl implements IAuthService {
     this.validatePassword(password, password_hash)
     const token = authUtils.createToken(user.id)
     return { user, token }
+  }
+
+  public cookieLogin: CookieLogin = async ({ cookies }) => {
+    const userId = this.extractUserIdFromCookie(cookies)
+    const user = await this.getUserById(userId)
+    return { user }
   }
 
   // ==============
@@ -97,6 +109,17 @@ class AuthServiceImpl implements IAuthService {
     if (!isValidPassword) {
       throw new HTTPUnauthorizedError('password is wrong')
     }
+  }
+  private extractUserIdFromCookie = (cookie: ValidCookie): string => {
+    const result = authUtils.getUserIdByCookie(cookie)
+    if (!result) throw new HTTPUnauthorizedError('invalid cookie')
+    return result.userId
+  }
+
+  private getUserById = async (userId: string): Promise<UserAttributes> => {
+    const user = await UserRepo.getById(userId)
+    if (!user) throw new HTTPNotFoundError('user now found')
+    return user
   }
 }
 

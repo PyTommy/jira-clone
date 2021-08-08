@@ -3,6 +3,7 @@ import { UserAttributes } from '@jira-clone/shared-types'
 import { authUtils } from '../util/authUtils'
 import { AuthService } from '../services/auth.service'
 import { HttpStatusCode } from '../commons/httpStatusCode.emum'
+import { HTTPUnauthorizedError } from '../error'
 
 export const registerUser: RequestHandler<
   {},
@@ -34,6 +35,21 @@ export const login: RequestHandler<
     const { user, token } = await AuthService.login({ email, password })
 
     res.setHeader('set-cookie', [authUtils.createCookie(token)])
+    return res.status(HttpStatusCode.OK).send({ user })
+  } catch (e) {
+    next(e)
+  }
+}
+
+export const cookieLogin: RequestHandler<{}, {}, { user: UserAttributes }> = async (
+  req,
+  res,
+  next,
+) => {
+  try {
+    const cookies = req.cookies
+    if (!authUtils.isValidCookieType(cookies)) throw new HTTPUnauthorizedError('invalid cookie')
+    const { user } = await AuthService.cookieLogin({ cookies })
     return res.status(HttpStatusCode.OK).send({ user })
   } catch (e) {
     next(e)

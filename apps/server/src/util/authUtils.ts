@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 
 type CookieKey = 'Authorization' | 'Max-Age'
 
-interface ValidCookie {
+export interface ValidCookie {
   Authorization: string
 }
 
@@ -22,11 +22,10 @@ interface IAuthUtil {
   createToken(userId: string): TokenData
   isPasswordMaching(password: string, password_hash: string): Promise<boolean>
   createCookie(tokenData: TokenData): string
+  getUserIdByCookie(cookie: ValidCookie): { userId: string } | void
   getCookieValue(cookie: string, key: CookieKey): string | undefined
-  isValidCookie(cookie: any): cookie is ValidCookie
-  isValidDataStoredInToken(
-    dataStoredInToken: any,
-  ): dataStoredInToken is DataStoredInToken
+  isValidCookieType(cookie: any): cookie is ValidCookie
+  isValidDataStoredInToken(dataStoredInToken: any): dataStoredInToken is DataStoredInToken
 }
 
 class AuthUtilsImpl implements IAuthUtil {
@@ -50,6 +49,13 @@ class AuthUtilsImpl implements IAuthUtil {
   createCookie(tokenData: TokenData): string {
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}`
   }
+  getUserIdByCookie(cookie: ValidCookie): { userId: string } | void {
+    if (!authUtils.isValidCookieType(cookie)) return
+    const verificationResponse = jwt.verify(cookie.Authorization, environment.jwt_secret) as unknown
+    if (!authUtils.isValidDataStoredInToken(verificationResponse)) return
+    const userId = verificationResponse._id
+    return { userId }
+  }
   getCookieValue(cookie: string, key: CookieKey): string | undefined {
     const regexp = new RegExp(`.*${key}=([^;]*)`)
     const result = regexp.exec(cookie)
@@ -57,17 +63,11 @@ class AuthUtilsImpl implements IAuthUtil {
       return result[1]
     }
   }
-  isValidCookie(cookie: any): cookie is ValidCookie {
-    return (
-      typeof cookie === 'object' &&
-      cookie !== null &&
-      typeof cookie.Authorization === 'string'
-    )
+  isValidCookieType(cookie: any): cookie is ValidCookie {
+    return typeof cookie === 'object' && cookie !== null && typeof cookie.Authorization === 'string'
   }
   isValidDataStoredInToken(data: any): data is DataStoredInToken {
-    return (
-      typeof data === 'object' && data !== null && typeof data._id === 'string'
-    )
+    return typeof data === 'object' && data !== null && typeof data._id === 'string'
   }
 }
 

@@ -1,42 +1,23 @@
 import { UserAttributes } from '@jira-clone/shared-types'
 import { NextFunction, Response } from 'express'
-import * as jwt from 'jsonwebtoken'
-import { environment } from '../environments/environment'
-import { UserRepo } from '../repositories'
+import { HTTPUnauthorizedError } from '../error'
+import { AuthService } from '../services/auth.service'
 import { authUtils } from '../util/authUtils'
 
 interface RequestWithUser extends Request {
   user: UserAttributes
 }
 
-async function authMiddleware(
-  request: RequestWithUser,
-  response: Response,
-  next: NextFunction,
-) {
-  const cookies = (request as any).cookies as unknown
-  if (authUtils.isValidCookie(cookies)) {
-    const secret = environment.jwt_secret
-    const verificationResponse = jwt.verify(
-      cookies.Authorization,
-      secret,
-    ) as any
-    if (authUtils.isValidDataStoredInToken(verificationResponse)) {
-      const userId = verificationResponse._id
-      try {
-        const user = await UserRepo.getById(userId)
-        if (user) {
-          request.user = user
-          next()
-        } else {
-          next('Authorization fail')
-        }
-      } catch (error) {
-        next('Authorization fail')
-      }
+async function authMiddleware(request: RequestWithUser, response: Response, next: NextFunction) {
+  try {
+    const cookies = (request as any).cookies as unknown
+    if (!authUtils.isValidCookieType(cookies)) {
+      throw new HTTPUnauthorizedError('invalid cookie')
     }
-  } else {
-    next('not valid cookie')
+    const { user } = await AuthService.cookieLogin({ cookies: cookies })
+    request.user = user
+  } catch (e) {
+    next(e)
   }
 }
 

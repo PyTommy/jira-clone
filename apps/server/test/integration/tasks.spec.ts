@@ -43,14 +43,10 @@ describe('POST /api/auth/register', () => {
     expect(response.body.user.email).toBe(user1.email)
     expect(response.body.user.password_hash).toBeUndefined()
     expect(
-      authUtils.getCookieValue(
-        response.header['set-cookie'][0],
-        'Authorization',
-      ).length > 0,
+      authUtils.getCookieValue(response.header['set-cookie'][0], 'Authorization').length > 0,
     ).toBeTruthy()
     expect(
-      authUtils.getCookieValue(response.header['set-cookie'][0], 'Max-Age')
-        .length > 0,
+      authUtils.getCookieValue(response.header['set-cookie'][0], 'Max-Age').length > 0,
     ).toBeTruthy()
   })
   it('should fail with already exsit error(409)', async () => {
@@ -68,7 +64,8 @@ describe('POST /api/auth/register', () => {
 })
 
 describe('POST /api/auth/login', () => {
-  let user = beforeAll(async () => {
+  let user: any = undefined
+  beforeAll(async () => {
     const uuid = StrUtils.uuid()
     user = {
       name: 'new_user1',
@@ -88,14 +85,33 @@ describe('POST /api/auth/login', () => {
     expect(response.body.user.email).toBe(user.email)
     expect(response.body.user.password_hash).toBeUndefined()
     expect(
-      authUtils.getCookieValue(
-        response.header['set-cookie'][0],
-        'Authorization',
-      ).length > 0,
+      authUtils.getCookieValue(response.header['set-cookie'][0], 'Authorization').length > 0,
     ).toBeTruthy()
     expect(
-      authUtils.getCookieValue(response.header['set-cookie'][0], 'Max-Age')
-        .length > 0,
+      authUtils.getCookieValue(response.header['set-cookie'][0], 'Max-Age').length > 0,
     ).toBeTruthy()
+  })
+})
+
+describe('POST /api/auth/cookie_login', () => {
+  let user = undefined
+  let cookies = ''
+  beforeAll(async () => {
+    const uuid = StrUtils.uuid()
+    user = {
+      name: 'cookie_user',
+      email: 'cookie_user' + uuid + '@example.com',
+      password: 'demodemo',
+    }
+    const response = await request(app).post('/api/auth/register').send(user)
+    cookies = response.header['set-cookie'][0]
+  })
+  it('should login with cookie', async () => {
+    const response = await request(app).get('/api/auth/cookie_login').set('Cookie', cookies).send()
+
+    expect(response.status).toBe(200)
+    expect(response.body.user.name).toBe(user.name)
+    expect(response.body.user.email).toBe(user.email)
+    expect(response.body.user.password_hash).toBeUndefined()
   })
 })
