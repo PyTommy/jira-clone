@@ -1,11 +1,13 @@
 import { StrictMode } from 'react'
 import * as ReactDOM from 'react-dom'
-
-import App from './app/app'
+import { BrowserRouter, Route } from 'react-router-dom'
+import LoginScreen from './app/Screens/LoginScreen'
 
 ReactDOM.render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <Route path="/" exact component={LoginScreen}></Route>
+    </BrowserRouter>
   </StrictMode>,
   document.getElementById('root'),
 )
