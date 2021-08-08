@@ -1,3 +1,4 @@
+import { Link } from '@client/components/Link'
 import { makeStyles, TextField } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import { useFormik } from 'formik'
@@ -51,6 +52,9 @@ const LoginScreen = () => {
         <Button color="primary" variant="contained" fullWidth type="submit">
           Submit
         </Button>
+        <p>
+          <Link to={'/register'}>サインアップはこちら！</Link>
+        </p>
       </form>
     </div>
   )

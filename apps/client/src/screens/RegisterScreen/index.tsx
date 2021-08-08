@@ -2,6 +2,7 @@ import { TextField } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import { useRegister } from './useRegister'
 import { useStyles } from './styles'
+import { Link } from '@client/components/Link'
 
 export const RegisterScreen = () => {
   const classes = useStyles()
@@ -34,6 +35,9 @@ export const RegisterScreen = () => {
         <Button color="primary" variant="contained" type="submit">
           サインアップ
         </Button>
+        <p>
+          <Link to={'/login'}>ログインはこっちだよ！！</Link>
+        </p>
       </form>
     </div>
   )
