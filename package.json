@@ -5,7 +5,7 @@
   "scripts": {
     "nx": "nx",
     "start:client": "nx run client:serve",
-    "start:api": "nx run api:serve",
+    "start:server": "nx run server:serve",
     "build": "nx build",
     "test": "npm run affected:test",
     "test:all": "nx run client:test --silent && nx run server:test --silent && nx run db:test --silent",
@@ -44,6 +44,7 @@
     "@emotion/styled": "11.1.5",
     "@material-ui/core": "^4.12.3",
     "@reduxjs/toolkit": "^1.6.1",
+    "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
     "core-js": "^3.6.5",
