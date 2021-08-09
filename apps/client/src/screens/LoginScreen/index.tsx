@@ -1,9 +1,11 @@
-import { TextField } from '@material-ui/core'
+import {login} from '@client/store/actionCreators'
+import {TextField} from '@material-ui/core'
 import Button from '@material-ui/core/Button'
-import { useFormik } from 'formik'
-import { Link } from 'react-router-dom'
+import {useFormik} from 'formik'
+import {useDispatch} from 'react-redux'
+import {Link} from 'react-router-dom'
 import * as yup from 'yup'
-import { useStyles } from './styles'
+import {useStyles} from './styles'
 
 const validationSchema = yup.object({
   email: yup.string().email('Enter a valid email').required('Emailは必須なんだよアホんだら'),
@@ -15,14 +17,15 @@ const validationSchema = yup.object({
 
 export const LoginScreen = () => {
   const classes = useStyles()
+  const dispatch = useDispatch()
   const formik = useFormik({
     initialValues: {
       email: 'foobar@example.com',
       password: 'foobar',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
+    onSubmit: ({email, password}) => {
+      dispatch(login({ email, password }))
     },
   })
 
