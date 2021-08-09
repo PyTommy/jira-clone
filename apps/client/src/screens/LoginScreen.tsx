@@ -1,8 +1,8 @@
-import { Link } from '@client/components/Link'
 import { makeStyles, TextField } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import { useFormik } from 'formik'
 import React from 'react'
+import { Link } from 'react-router-dom'
 import * as yup from 'yup'
 
 const validationSchema = yup.object({

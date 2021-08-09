@@ -2,7 +2,7 @@ import { TextField } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import { useRegister } from './useRegister'
 import { useStyles } from './styles'
-import { Link } from '@client/components/Link'
+import { Link } from 'react-router-dom'
 
 export const RegisterScreen = () => {
   const classes = useStyles()

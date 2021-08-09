@@ -4,6 +4,8 @@ import * as yup from 'yup'
 import { InferType } from 'yup'
 import { TextFieldProps } from '@material-ui/core'
 import { FormikUtils } from '@client/utils/formik.utils'
+import { useDispatch } from 'react-redux'
+import { register } from '@client/store/actionCreators'
 
 const validationSchema = yup.object({
   name: yup
@@ -28,6 +30,7 @@ interface ReturnValue {
 }
 
 export const useRegister = (initialValues?: RegisterFormInputs): ReturnValue => {
+  const dispatch = useDispatch()
   const formik = useFormik({
     initialValues: {
       name: 'tommy',
@@ -37,8 +40,8 @@ export const useRegister = (initialValues?: RegisterFormInputs): ReturnValue => 
       ...initialValues,
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
+    onSubmit: ({ name, email, password }) => {
+      dispatch(register({ name, email, password }))
     },
   })
 

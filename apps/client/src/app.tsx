@@ -4,14 +4,16 @@ import { Switch } from 'react-router-dom'
 import { RouteUtils } from './utils/route.utils'
 import { privateRoutes, publicRoutes } from './constants/routes.constant'
 import { RedirectRoute } from './components/Route'
+import { useSelector } from 'react-redux'
+import { selectAuth } from './store/selectors'
 
 export const App = () => {
   const [isInializing, setIsInitializing] = useState(false) // 自動ログインとかする。
-  const isAuthorized = false
+  const { isAuthenticated } = useSelector(selectAuth)
 
   if (isInializing) {
     return <div>This is Loading Spinner!!</div>
-  } else if (isAuthorized) {
+  } else if (isAuthenticated) {
     return (
       <main>
         {RouteUtils.renderRoutes(privateRoutes)}
