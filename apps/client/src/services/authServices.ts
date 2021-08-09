@@ -31,19 +31,9 @@ class AuthServiceImpl implements IAuthService {
     return user
   }
   cookieLogin: CookieLogin = async () => {
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        const mockResponse: UserAttributes = {
-          id: 'ifejijfie',
-          name: 'This is Mock!!',
-          email: 'test@example.com',
-          createdAt: Date.now().valueOf(),
-          updatedAt: Date.now().valueOf(),
-          deleted: false,
-        }
-        resolve(mockResponse)
-      }, 1000),
-    )
+    const response = await axios.get('/auth/cookie_login')
+    const { user } = response.data as { user: UserAttributes }
+    return user
   }
 }
 
