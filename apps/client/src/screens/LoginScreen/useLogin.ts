@@ -30,11 +30,11 @@ export const useLogin = (loginInputValue?: LoginFormInputs) => {
   })
   const emailTextFieldProps: TextFieldProps = FormikUtils.generateFormikTextFieldProps(formik, {
     id: 'email',
-    label: 'メールアドレス',
+    label: 'email',
   })
   const passwordTextFieldProps: TextFieldProps = FormikUtils.generateFormikTextFieldProps(formik, {
     id: 'password',
-    label: 'パスワード',
+    label: 'password',
   })
 
   return {
