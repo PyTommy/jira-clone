@@ -1,4 +1,4 @@
-import { Layout } from '@client/components/Layout'
+import { Layout } from '@client/containers/Layout'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Switch } from 'react-router-dom'
