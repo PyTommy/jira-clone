@@ -1,8 +1,8 @@
 import { RouteProps } from '@client/components/Route'
 import { DashboardScreen } from '@client/screens/DashboardScreen'
-import LoginScreen from '@client/screens/LoginScreen'
 import { RegisterScreen } from '@client/screens/RegisterScreen'
 import { menuKey } from '@client/types/menuKey.type'
+import LoginScreen from '../screens/LoginScreen'
 
 // Interfaces
 export type GroupRouteProps = { [key in menuKey]?: RouteProps }
