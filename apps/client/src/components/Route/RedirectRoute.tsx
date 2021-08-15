@@ -1,5 +1,5 @@
-import { Route, RouteProps } from './Route'
 import { Redirect, RedirectProps } from '../Redirect/Redirect'
+import { Route, RouteProps } from './Route'
 
 export const RedirectRoute = (props: RouteProps & Omit<RedirectProps, 'from'>) => {
   return (

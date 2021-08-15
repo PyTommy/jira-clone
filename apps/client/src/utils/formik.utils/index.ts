@@ -1,4 +1,3 @@
-import { FormikValues } from 'formik'
 import { GenerateFormikTextFieldProps } from './generateFormikTextField.type'
 
 interface IFormikUtils {

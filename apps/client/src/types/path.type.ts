@@ -1,1 +1,1 @@
-type Path = '/login' | '/register' | '*' | '/'
+export type Path = '/login' | '/register' | '*' | '/'
