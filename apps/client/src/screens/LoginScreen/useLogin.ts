@@ -1,10 +1,10 @@
-import { FormikUtils } from '@client/utils/formik.utils'
 import { TextFieldProps } from '@material-ui/core'
 import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import * as yup from 'yup'
 import { InferType } from 'yup'
 import { login } from '../../store/actionCreators/index'
+import { FormikUtils } from '../../utils/formik.utils'
 
 const validationSchema = yup.object({
   email: yup.string().email('Emailを入力してください').required('Emailは必須なんだよアホんだら'),

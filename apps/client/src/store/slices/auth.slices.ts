@@ -1,7 +1,5 @@
-import { AuthService } from '@client/services/authServices'
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { register, login, cookieLogin } from '../actionCreators'
-
+import { createSlice } from '@reduxjs/toolkit'
+import { cookieLogin, login, register } from '../actionCreators'
 import { AuthState } from '../types'
 
 export const initialState: AuthState = {

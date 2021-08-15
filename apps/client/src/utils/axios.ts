@@ -1,5 +1,5 @@
-import { environment } from '@client/configs/environments/environment.prod'
 import ax from 'axios'
+import { environment } from '../configs/environments/environment.prod'
 
 export const axios = ax.create({
   baseURL: environment.baseUrl,

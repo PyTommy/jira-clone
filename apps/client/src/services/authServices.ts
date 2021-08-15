@@ -1,5 +1,5 @@
-import { axios } from '@client/utils/axios'
 import { UserAttributes } from '@jira-clone/shared-types'
+import { axios } from '../utils/axios'
 
 // Methods
 type RegisterBody = { name: string; email: string; password: string }

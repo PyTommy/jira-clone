@@ -1,6 +1,6 @@
-import { RouteProps, Route } from '@client/components/Route'
-import { GroupRouteProps, RouteMap } from '@client/constants/routes.constant'
 import { ReactElement } from 'react'
+import { Route, RouteProps } from '../components/Route'
+import { GroupRouteProps, RouteMap } from '../constants/routes.constant'
 
 class RouteUtilsImpl {
   /**

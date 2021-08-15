@@ -1,11 +1,11 @@
-import { Formik, FormikConfig, useFormik } from 'formik'
+import { TextFieldProps } from '@material-ui/core'
+import { useFormik } from 'formik'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import * as yup from 'yup'
 import { InferType } from 'yup'
-import { TextFieldProps } from '@material-ui/core'
-import { FormikUtils } from '@client/utils/formik.utils'
-import { useDispatch } from 'react-redux'
-import { register } from '@client/store/actionCreators'
+import { register } from '../../store/actionCreators'
+import { FormikUtils } from '../../utils/formik.utils'
 
 const validationSchema = yup.object({
   name: yup

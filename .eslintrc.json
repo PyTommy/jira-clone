@@ -25,7 +25,8 @@
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript"],
       "rules": {
-        "no-empty-interface": false
+        "no-empty-interface": 0,
+        "@typescript-eslint/no-namespace": 0
       }
     },
     {
