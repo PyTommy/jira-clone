@@ -1,3 +1,4 @@
+import { Layout } from '@client/containers/Layout'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Switch } from 'react-router-dom'
@@ -25,19 +26,19 @@ export const App = () => {
     return <div>This is Loading Spinner!!</div>
   } else if (isAuthenticated) {
     return (
-      <main>
+      <Layout>
         {RouteUtils.renderRoutes(privateRoutes)}
         <RedirectRoute path={'*'} to={'/'} />
-      </main>
+      </Layout>
     )
   } else {
     return (
-      <main>
+      <Layout>
         <Switch>
           {RouteUtils.renderRoutes(publicRoutes)}
           <RedirectRoute path={'*'} to={'/login'} />
         </Switch>
-      </main>
+      </Layout>
     )
   }
 }

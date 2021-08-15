@@ -1,10 +1,9 @@
 import { StrictMode } from 'react'
 import * as ReactDOM from 'react-dom'
-import { BrowserRouter, Route } from 'react-router-dom'
-import LoginScreen, { App } from './app'
-import rootReducer from './store/slices'
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
+import { App } from './app'
+import './index.css'
 import { store } from './store/store'
 
 ReactDOM.render(
